@@ -1,0 +1,11 @@
+# lists all ec2_instances irrespective of their state
+#for more visit "https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2.html#EC2"
+
+
+import boto3
+def lambda_handler(event, context):
+    ec2 = boto3.resource('ec2')
+     instance_iterator = ec2.instances.all()
+     print(instance_iterator)
+     for instance in instance_iterator:
+        print(instance.id)
