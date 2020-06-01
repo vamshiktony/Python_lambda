@@ -1,0 +1,15 @@
+# Creating ec2_instance 
+
+import boto3
+
+def lambda_handler(event, context):
+    client = boto3.client('ec2')
+    instance = ec2.create_instances(
+        ImageId='ami-0f56279347d2fa43e',
+        InstanceType='t1.micro',
+        KeyName='california',
+        MaxCount=1,
+        MinCount=1,
+        SecurityGroupIds=[
+        'sg-019aeb06e09786d11',
+         ],)
