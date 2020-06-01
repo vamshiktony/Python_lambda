@@ -1,0 +1,42 @@
+#Using Api-gateway triggering an event in lambda which "Gets" cloudtrial events and prints.
+
+import boto3
+import json 
+
+def lambda_handler(event, context):
+    body = json.loads(event['body'])
+    print(body)
+    
+    attrKey = body['attrKey']
+    attrvalue = body['attrValue']
+    
+    result = cloud_trails(attrKey,attrvalue)
+    return {
+        'statusCode': 200,
+        'headers': {
+            "Access-Control-Allow-Origin" : "*"
+        },
+        'body': json.dumps(result, sort_keys=True, indent=4, separators=(',', ': '))
+    }
+    
+    
+def cloud_trails(AttrKey, AttrValue):
+    client = boto3.client('cloudtrail')
+    response = client.lookup_events(
+        LookupAttributes=[
+            {
+                'AttributeKey': AttrKey,
+                'AttributeValue': AttrValue
+            },
+        ],
+        MaxResults=1
+    )
+    
+    events = response['Events']
+    result = []
+    
+    for event in events:
+      result.append(event['CloudTrailEvent'])
+      #print("Event Name: {}".format(event['EventName']))
+    print (result)
+    return result
